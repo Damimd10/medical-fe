@@ -1,11 +1,13 @@
-import { PropsWithChildren } from "react";
+import { RouterProvider } from "react-router-dom";
 
 import { QueryClientProvider } from "@tanstack/react-query";
-import { queryClient } from "~/config";
+import { queryClient, router } from "~/config";
 
-const Providers = ({ children }: PropsWithChildren) => {
+const Providers = () => {
   return (
-    <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+    <QueryClientProvider client={queryClient}>
+      <RouterProvider router={router} />
+    </QueryClientProvider>
   );
 };
 

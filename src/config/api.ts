@@ -1,6 +1,11 @@
 import axios from "axios";
 import { refreshToken } from "~/utils";
 
+interface ISession {
+  accessToken: string;
+  refreshToken: string;
+}
+
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL as string,
   headers: {
@@ -10,9 +15,12 @@ const api = axios.create({
 
 api.interceptors.request.use(
   async (config) => {
-    const session = JSON.parse(localStorage.getItem("session") as string);
+    const session: ISession | null = JSON.parse(
+      localStorage.getItem("session") as string
+    );
 
     if (session?.accessToken) {
+      // @ts-ignore
       config.headers = {
         ...config.headers,
         authorization: `Bearer ${session?.accessToken}`,

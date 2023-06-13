@@ -31,7 +31,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-error-boundary": "^3.1.4",
-    "react-router-dom": "^6.9.0",
+    "react-router-dom": "^6.12.1",
     "zustand": "^4.3.5"
   },
   "devDependencies": {
@@ -49,7 +49,6 @@
     "@storybook/react-vite": "^7.0.4",
     "@storybook/test-runner": "^0.10.0",
     "@storybook/testing-library": "^0.1.0",
-    "@testing-library/react-hooks": "^8.0.1",
     "@trivago/prettier-plugin-sort-imports": "4.1.1",
     "@types/lodash-es": "^4.17.6",
     "@types/react": "^18.0.24",
