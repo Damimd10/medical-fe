@@ -1,8 +1,4 @@
 {
-  "trailingComma": "es5",
-  "tabWidth": 2,
-  "semi": true,
-  "singleQuote": false,
   "importOrder": [
     "^react",
     "^(?!(hooks|types|utils|shared|modules|[./])).+",
@@ -13,5 +9,9 @@
     "modules",
     "^[./]"
   ],
-  "importOrderSeparation": true
+  "importOrderSeparation": true,
+  "semi": true,
+  "singleQuote": false,
+  "tabWidth": 2,
+  "trailingComma": "es5"
 }
