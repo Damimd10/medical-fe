@@ -6,7 +6,7 @@ import { useLocalStorage } from "~/hooks";
 const ProtectedRoute = ({ children }: PropsWithChildren) => {
   const [values] = useLocalStorage("session", null);
 
-  if (!values.accessToken) {
+  if (!values?.accessToken) {
     return <Navigate to="/" />;
   }
 
