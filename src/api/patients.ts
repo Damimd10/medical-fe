@@ -15,6 +15,10 @@ const patientSchema = z.object({
   street: z.string().nullable(),
   created_by_id: z.number(),
   social_insurance_id: z.number().nullable(),
+  social_insurance: z.object({
+    id: z.number(),
+    name: z.string(),
+  }),
 });
 
 export type Patient = z.infer<typeof patientSchema>;
