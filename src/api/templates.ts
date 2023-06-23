@@ -7,6 +7,21 @@ const templateSchema = z.object({
   template_type: z.string(),
   alternative_name: z.array(z.string()),
   specialization_id: z.number(),
+  fields_on_templates: z.array(
+    z.object({
+      template_id: z.number(),
+      field_id: z.number(),
+      field: z.object({
+        id: z.number(),
+        input_type: z.string(),
+        label: z.string(),
+        default_value: z.string().nullable(),
+        alternative_name: z.array(z.string()),
+        full_name: z.string(),
+        right_label: z.string().nullable(),
+      }),
+    })
+  ),
 });
 
 export type Template = z.infer<typeof templateSchema>;

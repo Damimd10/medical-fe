@@ -1,15 +1,25 @@
+import { Navigate, useLocation } from "react-router-dom";
+
 import { Typography } from "@material-tailwind/react";
-import { TemplatesList } from "~/modules/appointments/components";
+import {
+  AppointmentForm,
+  TemplatesList,
+} from "~/modules/appointments/components";
 import { useTemplates } from "~/modules/templates/hooks";
 
 const Appointments = () => {
+  const { state } = useLocation();
   const { data = [] } = useTemplates();
 
+  if (!state || !state.patient) {
+    return <Navigate to="/dashboard/patients" />;
+  }
+
   return (
-    <section className="border border-[#E0E7FE] rounded-3xl bg-slate-400 bg-opacity-40 w-full m-4 p-8">
+    <div>
       <div className="mb-4">
         <Typography className="font-primary" variant="h5">
-          Cita
+          {state.patient.surname} {state.patient.name}
         </Typography>
       </div>
       <div className="flex gap-x-2">
@@ -17,10 +27,10 @@ const Appointments = () => {
           <TemplatesList templates={data} />
         </div>
         <div className="border border-[#E0E7FE] bg-white bg-opacity-20 rounded-lg w-full">
-          templates
+          <AppointmentForm templates={data} />
         </div>
       </div>
-    </section>
+    </div>
   );
 };
 

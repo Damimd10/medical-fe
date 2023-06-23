@@ -19,13 +19,6 @@ module.exports = {
   },
   plugins: ["react", "@typescript-eslint"],
   rules: {
-    "@typescript-eslint/no-explicit-any": [
-      "warn",
-      {
-        fixToUnknown: true,
-        ignoreRestArgs: true,
-      },
-    ],
     "react/jsx-key": [
       "warn",
       {

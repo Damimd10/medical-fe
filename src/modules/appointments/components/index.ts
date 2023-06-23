@@ -1,4 +1,5 @@
+import AppointmentForm from "./AppointmentForm";
 import TemplateItem from "./TemplateItem";
 import TemplatesList from "./TemplatesList";
 
-export { TemplateItem, TemplatesList };
+export { AppointmentForm, TemplateItem, TemplatesList };

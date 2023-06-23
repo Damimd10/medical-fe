@@ -6,14 +6,14 @@ const Patients = () => {
   const { data = [] } = usePatients();
 
   return (
-    <section className="border border-[#E0E7FE] rounded-3xl bg-slate-400 bg-opacity-40 w-full m-4 p-8">
+    <div>
       <div className="mb-4">
         <Typography className="font-primary" variant="h5">
           Lista de Pacientes
         </Typography>
       </div>
       <PatientsList patients={data} />
-    </section>
+    </div>
   );
 };
 

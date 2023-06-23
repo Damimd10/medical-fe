@@ -1,3 +1,4 @@
+import PatientItem from "./PatientItem";
 import PatientsList from "./PatientsList";
 
-export { PatientsList };
+export { PatientItem, PatientsList };
