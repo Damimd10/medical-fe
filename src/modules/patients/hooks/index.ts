@@ -1,3 +1,4 @@
+import usePatient from "./usePatient";
 import usePatients from "./usePatients";
 
-export { usePatients };
+export { usePatient, usePatients };

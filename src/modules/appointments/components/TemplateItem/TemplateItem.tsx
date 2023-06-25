@@ -19,7 +19,7 @@ const TemplateItem = ({ template }: TemplateItemProps) => {
       key={template.id}
     >
       <Typography className="color-[#70708C]">{template.name}</Typography>
-      <Checkbox checked={isChecked} onClick={handleClickTemplate} />
+      <Checkbox defaultChecked={isChecked} onClick={handleClickTemplate} />
     </div>
   );
 };

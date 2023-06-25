@@ -1,5 +1,20 @@
 import { RegisterOptions } from "react-hook-form";
 
+import {
+  Appointment,
+  Doctor,
+  Field,
+  Patient,
+  SocialInsurance,
+  Speciality,
+  appointmentSchema,
+  doctorSchema,
+  fieldSchema,
+  patientSchema,
+  socialInsuranceSchema,
+  specialitySchema,
+} from "./schemas";
+
 type ConditionFunction = (args: unknown) => boolean;
 
 export type ControlType =
@@ -25,3 +40,21 @@ export interface DynamicFieldData {
   config?: RegisterOptions;
   condition?: ConditionFunction;
 }
+
+export {
+  appointmentSchema,
+  doctorSchema,
+  fieldSchema,
+  patientSchema,
+  socialInsuranceSchema,
+  specialitySchema,
+};
+
+export type {
+  Appointment,
+  Doctor,
+  Field,
+  Patient,
+  SocialInsurance,
+  Speciality,
+};

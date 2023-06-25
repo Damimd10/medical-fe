@@ -1,35 +1,18 @@
 import { FormProvider, useForm } from "react-hook-form";
 
-import { Template } from "~/api/templates";
 import { DynamicControl } from "~/components";
-import useAppointmentStore from "~/store/appointments";
+import { Field } from "~/types";
 
-interface AppointmentFormProps {
-  templates: Template[];
+interface FieldWithValue extends Field {
+  value: string;
 }
 
-const AppointmentForm = ({ templates }: AppointmentFormProps) => {
-  const { selectedTemplates } = useAppointmentStore();
+interface AppointmentFormProps {
+  fields: FieldWithValue[];
+}
 
+const AppointmentForm = ({ fields }: AppointmentFormProps) => {
   const methods = useForm();
-
-  const fields = selectedTemplates
-    .map((templateId) => {
-      const template = templates.find(
-        (currentTemplate) => currentTemplate.id === templateId
-      );
-
-      if (!template) {
-        return null;
-      }
-
-      return template.fields_on_templates.map(
-        (fieldOnTemplate) => fieldOnTemplate.field
-      );
-    })
-    .flat();
-
-  console.log("HERE FIELDS", fields);
 
   return (
     <FormProvider {...methods}>
@@ -41,10 +24,10 @@ const AppointmentForm = ({ templates }: AppointmentFormProps) => {
             <DynamicControl
               key={field.id}
               id={field.id}
-              defaultValue={field.default_value || ""}
-              fieldName={field.full_name}
-              inputType={field.input_type}
-              label={field.label}
+              defaultValue={field.value || field.default_value || ""}
+              fieldName={field.full_name || ""}
+              inputType={field.input_type || ""}
+              label={field.label || ""}
             />
           );
         })}

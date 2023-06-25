@@ -1,27 +1,11 @@
-import { z } from "zod";
 import { api } from "~/config";
+import { Patient, patientSchema } from "~/types";
 
-const patientSchema = z.object({
-  id: z.number(),
-  name: z.string().nullable(),
-  surname: z.string().nullable(),
-  social_insurance_number: z.string().nullable(),
-  birth_date: z.string().nullable(),
-  phone_number: z.string().nullable(),
-  is_alive: z.boolean(),
-  email: z.string().nullable(),
-  country: z.string().nullable(),
-  city: z.string().nullable(),
-  street: z.string().nullable(),
-  created_by_id: z.number(),
-  social_insurance_id: z.number().nullable(),
-  social_insurance: z.object({
-    id: z.number(),
-    name: z.string(),
-  }),
-});
+export const getPatientById = async (id: string): Promise<Patient> => {
+  const response = await api.get(`/patients/${id}`);
 
-export type Patient = z.infer<typeof patientSchema>;
+  return patientSchema.parse(response.data);
+};
 
 export const getPatients = async (): Promise<Patient[]> => {
   const response = await api.get("/patients");

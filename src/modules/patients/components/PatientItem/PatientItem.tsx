@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 
 import { Checkbox, Typography } from "@material-tailwind/react";
-import { Patient } from "~/api/patients";
+import { Patient } from "~/types";
 
 interface PatientListItemProps {
   patient: Patient;
@@ -31,7 +31,7 @@ const PatientItem = ({ patient }: PatientListItemProps) => {
         </Typography>
       </div>
       <div className="w-5/12">
-        <Typography>{patient.social_insurance.name}</Typography>
+        <Typography>{patient.social_insurance?.name}</Typography>
       </div>
     </div>
   );

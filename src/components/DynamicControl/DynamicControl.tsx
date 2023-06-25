@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useFormContext } from "react-hook-form";
 
 import { DynamicFieldData } from "~/types";
@@ -25,7 +26,15 @@ export default function DynamicControl({
   label,
   options = [],
 }: DynamicFieldData) {
-  const { control, register } = useFormContext();
+  const { control, register, reset } = useFormContext();
+
+  useEffect(() => {
+    if (defaultValue) {
+      reset({
+        [fieldName]: defaultValue,
+      });
+    }
+  }, [fieldName, defaultValue, reset]);
 
   const DynamicComponent = DYNAMIC_COMPONENTS[inputType];
 

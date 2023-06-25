@@ -3,6 +3,7 @@ import { createBrowserRouter } from "react-router-dom";
 
 import { ErrorBoundary, Layout, ProtectedRoute } from "~/components";
 
+const AppointmentPage = lazy(() => import("~/pages/Appointments"));
 const PatientDetailsPage = lazy(() => import("~/pages/PatientDetails"));
 const PatientsListPage = lazy(() => import("~/pages/Patients"));
 const RootPage = lazy(() => import("~/pages/Root"));
@@ -32,7 +33,25 @@ export default createBrowserRouter([
             element: <PatientsListPage />,
           },
           {
-            element: <PatientDetailsPage />,
+            children: [
+              {
+                index: true,
+                element: <PatientDetailsPage />,
+              },
+              {
+                children: [
+                  {
+                    index: true,
+                    element: <AppointmentPage />,
+                  },
+                  {
+                    element: <AppointmentPage />,
+                    path: ":appointmentId",
+                  },
+                ],
+                path: "appointments",
+              },
+            ],
             path: ":patientId",
           },
         ],

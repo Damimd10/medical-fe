@@ -1,5 +1,5 @@
 import { Checkbox, Typography } from "@material-tailwind/react";
-import { Patient } from "~/api/patients";
+import { Patient } from "~/types";
 
 import PatientItem from "../PatientItem";
 
