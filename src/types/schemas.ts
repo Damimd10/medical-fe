@@ -22,6 +22,10 @@ export const fieldSchema = z.object({
   right_label: z.string().nullable(),
 });
 
+export const templateSchema = z.object({
+  id: z.number(),
+});
+
 export const appointmentSchema = z.object({
   id: z.number(),
   date: z.string(),
@@ -29,6 +33,9 @@ export const appointmentSchema = z.object({
   speciality: z.optional(specialitySchema),
   appointment_fields: z.optional(
     z.array(z.object({ field: fieldSchema, value: z.string() }))
+  ),
+  appointment_templates: z.optional(
+    z.array(z.object({ template: templateSchema }))
   ),
 });
 
@@ -61,3 +68,4 @@ export type Field = z.infer<typeof fieldSchema>;
 export type Patient = z.infer<typeof patientSchema>;
 export type SocialInsurance = z.infer<typeof socialInsuranceSchema>;
 export type Speciality = z.infer<typeof specialitySchema>;
+export type Template = z.infer<typeof templateSchema>;

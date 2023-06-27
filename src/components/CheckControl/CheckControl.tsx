@@ -14,8 +14,9 @@ const CheckControl = ({
   return (
     <Controller
       control={control}
+      defaultValue={Boolean(defaultValue)}
       name={fieldName}
-      render={({ field }) => (
+      render={({ field: { onChange } }) => (
         <Checkbox
           defaultChecked={Boolean(defaultValue)}
           label={
@@ -27,7 +28,7 @@ const CheckControl = ({
               {label}
             </Typography>
           }
-          {...field}
+          onChange={onChange}
         />
       )}
     />

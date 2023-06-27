@@ -2,6 +2,8 @@ import { useMemo } from "react";
 import { Navigate, useParams } from "react-router-dom";
 
 import { Typography } from "@material-tailwind/react";
+import { uniqBy } from "lodash";
+import { Template } from "~/api/templates";
 import {
   AppointmentForm,
   TemplatesList,
@@ -11,6 +13,27 @@ import { usePatient } from "~/modules/patients/hooks";
 import { useTemplates } from "~/modules/templates/hooks";
 import useAppointmentStore from "~/store/appointments";
 
+const getFieldsFromTemplate = (
+  selectedTemplates: number[],
+  templates: Template[]
+) => {
+  return selectedTemplates
+    .map((templateId) => {
+      const template = templates.find(
+        (currentTemplate) => currentTemplate.id === templateId
+      );
+
+      if (!template) {
+        return null;
+      }
+
+      return template.fields_on_templates.map(
+        (fieldOnTemplate) => fieldOnTemplate.field
+      );
+    })
+    .flat();
+};
+
 const Appointments = () => {
   const { selectedTemplates } = useAppointmentStore();
   const { appointmentId = "", patientId = "" } = useParams();
@@ -19,30 +42,25 @@ const Appointments = () => {
   const { data: appointment } = useAppointment(appointmentId);
 
   const fields = useMemo(() => {
-    if (appointment?.id) {
-      return appointment.appointment_fields?.map((appointmentField) => ({
-        ...appointmentField.field,
-        value: appointmentField.value,
-      }));
+    const fieldsFromTemplate = getFieldsFromTemplate(
+      selectedTemplates,
+      templates
+    );
+
+    if (appointment?.id && appointment?.appointment_fields) {
+      const prefilledFields = appointment.appointment_fields?.map(
+        (appointmentField) => ({
+          ...appointmentField.field,
+          value: appointmentField.value,
+        })
+      );
+
+      const resultFields = [...prefilledFields, ...fieldsFromTemplate];
+
+      return uniqBy(resultFields, (field) => field?.id);
     }
 
-    const fieldsFromTemplate = selectedTemplates
-      .map((templateId) => {
-        const template = templates.find(
-          (currentTemplate) => currentTemplate.id === templateId
-        );
-
-        if (!template) {
-          return null;
-        }
-
-        return template.fields_on_templates.map(
-          (fieldOnTemplate) => fieldOnTemplate.field
-        );
-      })
-      .flat();
-
-    return fieldsFromTemplate;
+    return uniqBy(fieldsFromTemplate, (field) => field?.id);
   }, [
     appointment?.appointment_fields,
     appointment?.id,
@@ -66,7 +84,10 @@ const Appointments = () => {
           <TemplatesList templates={templates} />
         </div>
         <div className="border border-[#E0E7FE] bg-white bg-opacity-20 rounded-lg w-full">
-          <AppointmentForm fields={fields as any} />
+          <AppointmentForm
+            appointmentId={appointment?.id}
+            fields={fields as any}
+          />
         </div>
       </div>
     </section>

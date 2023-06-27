@@ -13,6 +13,7 @@ const templateSchema = z.object({
       field_id: z.number(),
       field: z.object({
         id: z.number(),
+        field_id: z.string(),
         input_type: z.string(),
         label: z.string(),
         default_value: z.string().nullable(),

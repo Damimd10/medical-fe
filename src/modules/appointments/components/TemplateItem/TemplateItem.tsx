@@ -7,19 +7,37 @@ interface TemplateItemProps {
 }
 
 const TemplateItem = ({ template }: TemplateItemProps) => {
-  const { selectedTemplates, updateSelectedTemplates } = useAppointmentStore();
+  const {
+    prefilledTemplates,
+    selectedTemplates,
+    updatePrefilledTemplates,
+    updateSelectedTemplates,
+  } = useAppointmentStore();
 
-  const handleClickTemplate = () => updateSelectedTemplates(template.id);
+  const isPreffiled = prefilledTemplates.includes(template.id);
+  const isSelected = selectedTemplates.includes(template.id);
 
-  const isChecked = selectedTemplates.includes(template.id);
+  const handleClickTemplate = () => {
+    if (isPreffiled) {
+      return updatePrefilledTemplates(template.id);
+    }
+
+    updateSelectedTemplates(template.id);
+  };
+
+  const isChecked = isPreffiled || isSelected;
 
   return (
     <div
-      className="flex items-center justify-between border border-[#E0E7FE] rounded-lg px-3 py-4"
+      className="flex items-center justify-between border border-[#E0E7FE] rounded-lg px-3 py-2"
       key={template.id}
     >
       <Typography className="color-[#70708C]">{template.name}</Typography>
-      <Checkbox defaultChecked={isChecked} onClick={handleClickTemplate} />
+      <Checkbox
+        checked={isChecked}
+        disabled={isPreffiled}
+        onClick={handleClickTemplate}
+      />
     </div>
   );
 };

@@ -6,3 +6,12 @@ export const getAppointmentById = async (id: string): Promise<Appointment> => {
 
   return appointmentSchema.parse(response.data);
 };
+
+export const updateAppointment = async (
+  id: string,
+  data: any
+): Promise<Appointment> => {
+  const response = await api.post(`/appointments/${id}/fields`, data);
+
+  return response.data;
+};

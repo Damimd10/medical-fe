@@ -30,7 +30,7 @@ export interface SelectOption {
 }
 
 export interface DynamicFieldData {
-  id: number;
+  id: string;
   fieldName: string;
   inputType: string;
   defaultValue: string;

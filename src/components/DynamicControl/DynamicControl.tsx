@@ -30,11 +30,12 @@ export default function DynamicControl({
 
   useEffect(() => {
     if (defaultValue) {
-      reset({
-        [fieldName]: defaultValue,
-      });
+      reset((values) => ({
+        ...values,
+        [id]: defaultValue,
+      }));
     }
-  }, [fieldName, defaultValue, reset]);
+  }, [id, defaultValue, reset]);
 
   const DynamicComponent = DYNAMIC_COMPONENTS[inputType];
 
@@ -45,7 +46,7 @@ export default function DynamicControl({
       <DynamicComponent
         control={control}
         defaultValue={defaultValue}
-        fieldName={fieldName}
+        fieldName={id}
         fields={fields}
         label={label}
         register={register}
