@@ -4,9 +4,12 @@ import { DevTool } from "@hookform/devtools";
 import { Button } from "@material-tailwind/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { DynamicControl } from "~/components";
+import {
+  useUpdateAppointmentFields,
+  useUpdateAppointmentTemplates,
+} from "~/modules/appointments/hooks";
+import useAppointmentStore from "~/store/appointments";
 import { Field } from "~/types";
-
-import { useUpdateAppointment } from "../../hooks";
 
 interface FieldWithValue extends Field {
   value: string;
@@ -19,16 +22,22 @@ interface AppointmentFormProps {
 
 const AppointmentForm = ({ appointmentId, fields }: AppointmentFormProps) => {
   const queryClient = useQueryClient();
-  const { mutate } = useUpdateAppointment();
+  const { mutate: updateFields } = useUpdateAppointmentFields();
+  const { mutate: updateTemplates } = useUpdateAppointmentTemplates();
+  const { selectedTemplates } = useAppointmentStore();
   const methods = useForm();
 
-  const onSubmit = (data: any) => {
+  const onSubmit = async (data: any) => {
     const fields = Object.keys(data).map((key) => ({
       fieldId: Number(key),
       value: String(data[key]),
     }));
 
-    mutate(
+    const templates = selectedTemplates.map((templateId) => ({
+      templateId,
+    }));
+
+    updateFields(
       { id: appointmentId, appointment: fields },
       {
         onSuccess: () => {
@@ -38,6 +47,8 @@ const AppointmentForm = ({ appointmentId, fields }: AppointmentFormProps) => {
         },
       }
     );
+
+    updateTemplates({ id: appointmentId, appointment: templates });
   };
 
   return (

@@ -7,11 +7,17 @@ export const getAppointmentById = async (id: string): Promise<Appointment> => {
   return appointmentSchema.parse(response.data);
 };
 
-export const updateAppointment = async (
+export const updateAppointmentFields = async (
   id: string,
   data: any
 ): Promise<Appointment> => {
   const response = await api.post(`/appointments/${id}/fields`, data);
+
+  return response.data;
+};
+
+export const updateAppointmentTemplates = async (id: string, data: any) => {
+  const response = await api.post(`/appointments/${id}/templates`, data);
 
   return response.data;
 };

@@ -1,4 +1,9 @@
 import useAppointment from "./useAppointment";
-import useUpdateAppointment from "./useUpdateAppointment";
+import useUpdateAppointmentFields from "./useUpdateAppointmentFields";
+import useUpdateAppointmentTemplates from "./useUpdateAppointmentTemplates";
 
-export { useAppointment, useUpdateAppointment };
+export {
+  useAppointment,
+  useUpdateAppointmentFields,
+  useUpdateAppointmentTemplates,
+};
