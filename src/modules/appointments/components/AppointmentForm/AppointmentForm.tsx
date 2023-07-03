@@ -1,8 +1,10 @@
 import { FormProvider, useForm } from "react-hook-form";
+import { useParams } from "react-router-dom";
 
 import { DevTool } from "@hookform/devtools";
 import { Button } from "@material-tailwind/react";
 import { useQueryClient } from "@tanstack/react-query";
+import { createAppointment } from "~/api/appointments";
 import { DynamicControl } from "~/components";
 import {
   useUpdateAppointmentFields,
@@ -18,11 +20,12 @@ interface FieldWithValue extends Field {
 }
 
 interface AppointmentFormProps {
-  appointmentId: number | undefined;
   fields: FieldWithValue[];
 }
 
-const AppointmentForm = ({ appointmentId, fields }: AppointmentFormProps) => {
+const AppointmentForm = ({ fields }: AppointmentFormProps) => {
+  const { appointmentId = "" } = useParams();
+
   const queryClient = useQueryClient();
   const { mutate: updateFields } = useUpdateAppointmentFields();
   const { mutate: updateTemplates } = useUpdateAppointmentTemplates();
@@ -30,8 +33,6 @@ const AppointmentForm = ({ appointmentId, fields }: AppointmentFormProps) => {
   const { removedFields, selectedTemplates } = useAppointmentStore();
   const state = useTemporalStore((state) => state);
   const methods = useForm();
-
-  console.log("HERE REST", state);
 
   const onSubmit = async (data: any) => {
     const fields = Object.keys(data).map((key) => ({
@@ -42,6 +43,16 @@ const AppointmentForm = ({ appointmentId, fields }: AppointmentFormProps) => {
     const templates = selectedTemplates.map((templateId) => ({
       templateId,
     }));
+
+    if (!appointmentId) {
+      return createAppointment({
+        date: Date.now(),
+        doctorId: 1,
+        fields,
+        patientId: 1,
+        specialityId: 1,
+      });
+    }
 
     if (removedFields.length > 0) {
       removeFields({ id: String(appointmentId), fields: removedFields });

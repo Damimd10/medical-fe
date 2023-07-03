@@ -37,10 +37,7 @@ const Appointments = ({
           <TemplatesList templates={templates} />
         </div>
         <div className="border border-[#E0E7FE] bg-white bg-opacity-20 rounded-lg w-full">
-          <AppointmentForm
-            appointmentId={appointment.id}
-            fields={fields as any}
-          />
+          <AppointmentForm fields={fields as any} />
         </div>
       </div>
     </section>
@@ -58,9 +55,9 @@ const Container = () => {
     return <Navigate to="/dashboard/patients" />;
   }
 
-  if (!templates || !appointment || !patient) {
+  /* if (!templates || !appointment || !patient) {
     return <div>Missing Information</div>;
-  }
+  } */
 
   return (
     <Appointments

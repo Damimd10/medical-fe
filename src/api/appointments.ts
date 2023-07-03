@@ -1,6 +1,12 @@
 import { api } from "~/config";
 import { Appointment, appointmentSchema } from "~/types";
 
+export const createAppointment = async (data: any): Promise<Appointment> => {
+  const response = await api.post("/appointments", data);
+
+  return response.data;
+};
+
 export const getAppointmentById = async (id: string): Promise<Appointment> => {
   const response = await api.get(`/appointments/${id}`);
 
