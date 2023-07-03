@@ -8,8 +8,10 @@ import {
   useUpdateAppointmentFields,
   useUpdateAppointmentTemplates,
 } from "~/modules/appointments/hooks";
-import useAppointmentStore from "~/store/appointments";
+import useAppointmentStore, { useTemporalStore } from "~/store/appointments";
 import { Field } from "~/types";
+
+import useRemoveFields from "../../hooks/useRemoveFields";
 
 interface FieldWithValue extends Field {
   value: string;
@@ -24,8 +26,12 @@ const AppointmentForm = ({ appointmentId, fields }: AppointmentFormProps) => {
   const queryClient = useQueryClient();
   const { mutate: updateFields } = useUpdateAppointmentFields();
   const { mutate: updateTemplates } = useUpdateAppointmentTemplates();
-  const { selectedTemplates } = useAppointmentStore();
+  const { mutate: removeFields } = useRemoveFields();
+  const { removedFields, selectedTemplates } = useAppointmentStore();
+  const state = useTemporalStore((state) => state);
   const methods = useForm();
+
+  console.log("HERE REST", state);
 
   const onSubmit = async (data: any) => {
     const fields = Object.keys(data).map((key) => ({
@@ -36,6 +42,10 @@ const AppointmentForm = ({ appointmentId, fields }: AppointmentFormProps) => {
     const templates = selectedTemplates.map((templateId) => ({
       templateId,
     }));
+
+    if (removedFields.length > 0) {
+      removeFields({ id: String(appointmentId), fields: removedFields });
+    }
 
     updateFields(
       { id: appointmentId, appointment: fields },
@@ -68,7 +78,8 @@ const AppointmentForm = ({ appointmentId, fields }: AppointmentFormProps) => {
             />
           );
         })}
-        <div className="flex justify-end py-4">
+        <div className="flex justify-end gap-x-2 py-4">
+          <Button onClick={() => state.undo()}>Deshacer</Button>
           <Button onClick={methods.handleSubmit(onSubmit)}>Guardar</Button>
         </div>
       </div>

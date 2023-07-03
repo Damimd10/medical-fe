@@ -1,6 +1,8 @@
 import { useEffect } from "react";
 import { useFormContext } from "react-hook-form";
 
+import { XMarkIcon } from "@heroicons/react/24/solid";
+import useAppointmentStore from "~/store/appointments";
 import { DynamicFieldData } from "~/types";
 
 import CheckControl from "../CheckControl";
@@ -26,7 +28,12 @@ export default function DynamicControl({
   label,
   options = [],
 }: DynamicFieldData) {
+  const { setRemovedFields } = useAppointmentStore();
   const { control, register, reset } = useFormContext();
+
+  const handleRemoveField = () => {
+    setRemovedFields(Number(id));
+  };
 
   useEffect(() => {
     if (defaultValue) {
@@ -42,7 +49,7 @@ export default function DynamicControl({
   if (!DynamicComponent) return null;
 
   return (
-    <div className="py-2">
+    <div className="py-2 flex items-center gap-x-2">
       <DynamicComponent
         control={control}
         defaultValue={defaultValue}
@@ -50,6 +57,10 @@ export default function DynamicControl({
         fields={fields}
         label={label}
         register={register}
+      />
+      <XMarkIcon
+        className="h-3 w-3 hover:cursor-pointer"
+        onClick={handleRemoveField}
       />
     </div>
   );

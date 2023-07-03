@@ -36,7 +36,9 @@
     "react-error-boundary": "^3.1.4",
     "react-hook-form": "^7.45.0",
     "react-router-dom": "^6.12.1",
+    "use-undo": "^1.1.1",
     "zod": "^3.21.4",
+    "zundo": "^2.0.0-beta.23",
     "zustand": "^4.3.5"
   },
   "devDependencies": {

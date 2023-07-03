@@ -21,3 +21,9 @@ export const updateAppointmentTemplates = async (id: string, data: any) => {
 
   return response.data;
 };
+
+export const removeFieldsFromAppointment = async (id: string, data: any) => {
+  const response = await api.post(`/appointments/${id}/detach-field`, data);
+
+  return response.data;
+};

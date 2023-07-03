@@ -1,7 +1,11 @@
-import { create } from "zustand";
+import type { TemporalState } from "zundo";
+import { temporal } from "zundo";
+import { create, useStore } from "zustand";
 import { devtools } from "zustand/middleware";
 
 interface AppointmentState {
+  removedFields: number[];
+  setRemovedFields: (fields: number) => void;
   prefilledTemplates: number[];
   resetPrefilledTemplates: () => void;
   resetSelectedTemplates: () => void;
@@ -11,38 +15,48 @@ interface AppointmentState {
 }
 
 const useAppointmentStore = create<AppointmentState>()(
-  devtools((set, get) => ({
-    prefilledTemplates: [],
-    resetSelectedTemplates: () => set({ selectedTemplates: [] }),
-    resetPrefilledTemplates: () => set({ prefilledTemplates: [] }),
-    selectedTemplates: [],
-    updatePrefilledTemplates: (id) => {
-      const templates = get().prefilledTemplates;
+  devtools(
+    temporal((set, get) => ({
+      removedFields: [],
+      setRemovedFields: (fieldId) =>
+        set({ removedFields: [...get().removedFields, fieldId] }),
+      prefilledTemplates: [],
+      resetSelectedTemplates: () => set({ selectedTemplates: [] }),
+      resetPrefilledTemplates: () => set({ prefilledTemplates: [] }),
+      selectedTemplates: [],
+      updatePrefilledTemplates: (id) => {
+        const templates = get().prefilledTemplates;
 
-      if (templates.includes(id)) {
+        if (templates.includes(id)) {
+          return set({
+            prefilledTemplates: templates.filter((template) => template !== id),
+          });
+        }
+
         return set({
-          prefilledTemplates: templates.filter((template) => template !== id),
+          prefilledTemplates: [...templates, id],
         });
-      }
+      },
+      updateSelectedTemplates: (id) => {
+        const templates = get().selectedTemplates;
 
-      return set({
-        prefilledTemplates: [...templates, id],
-      });
-    },
-    updateSelectedTemplates: (id) => {
-      const templates = get().selectedTemplates;
+        if (templates.includes(id)) {
+          return set({
+            selectedTemplates: templates.filter((template) => template !== id),
+          });
+        }
 
-      if (templates.includes(id)) {
         return set({
-          selectedTemplates: templates.filter((template) => template !== id),
+          selectedTemplates: [...templates, id],
         });
-      }
-
-      return set({
-        selectedTemplates: [...templates, id],
-      });
-    },
-  }))
+      },
+    }))
+  )
 );
+
+export const useTemporalStore = <T>(
+  selector: (state: TemporalState<AppointmentState>) => T,
+  equality?: (a: T, b: T) => boolean
+) => useStore(useAppointmentStore.temporal, selector, equality);
 
 export default useAppointmentStore;

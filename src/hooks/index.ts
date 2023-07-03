@@ -1,3 +1,4 @@
+import useFields from "./useFields";
 import useLocalStorage from "./useLocalStorage";
 
-export { useLocalStorage };
+export { useFields, useLocalStorage };
