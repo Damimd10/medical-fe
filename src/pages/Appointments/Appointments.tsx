@@ -55,10 +55,6 @@ const Container = () => {
     return <Navigate to="/dashboard/patients" />;
   }
 
-  /* if (!templates || !appointment || !patient) {
-    return <div>Missing Information</div>;
-  } */
-
   return (
     <Appointments
       appointment={appointment as Appointment}

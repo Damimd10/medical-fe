@@ -4,7 +4,7 @@ import { api } from "~/config";
 const templateSchema = z.object({
   id: z.number(),
   name: z.string(),
-  template_type: z.string(),
+  template_type: z.optional(z.string()),
   alternative_name: z.array(z.string()),
   specialization_id: z.number(),
   fields_on_templates: z.array(

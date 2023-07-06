@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useParams } from "react-router-dom";
 
@@ -14,6 +15,7 @@ import useAppointmentStore, { useTemporalStore } from "~/store/appointments";
 import { Field } from "~/types";
 
 import useRemoveFields from "../../hooks/useRemoveFields";
+import FieldsModal from "../FieldsModal";
 
 interface FieldWithValue extends Field {
   value: string;
@@ -25,17 +27,24 @@ interface AppointmentFormProps {
 
 const AppointmentForm = ({ fields }: AppointmentFormProps) => {
   const { appointmentId = "" } = useParams();
-
   const queryClient = useQueryClient();
+  const methods = useForm();
+
   const { mutate: updateFields } = useUpdateAppointmentFields();
   const { mutate: updateTemplates } = useUpdateAppointmentTemplates();
   const { mutate: removeFields } = useRemoveFields();
+
   const { removedFields, selectedTemplates } = useAppointmentStore();
   const state = useTemporalStore((state) => state);
-  const methods = useForm();
+
+  const [open, setOpen] = useState(false);
+
+  const handleOpen = () => setOpen(!open);
 
   const onSubmit = async (data: any) => {
-    const fields = Object.keys(data).map((key) => ({
+    const { fields, ...form } = data;
+
+    const formFields = Object.keys(form).map((key) => ({
       fieldId: Number(key),
       value: String(data[key]),
     }));
@@ -48,7 +57,7 @@ const AppointmentForm = ({ fields }: AppointmentFormProps) => {
       return createAppointment({
         date: Date.now(),
         doctorId: 1,
-        fields,
+        fields: formFields,
         patientId: 1,
         specialityId: 1,
       });
@@ -59,7 +68,7 @@ const AppointmentForm = ({ fields }: AppointmentFormProps) => {
     }
 
     updateFields(
-      { id: appointmentId, appointment: fields },
+      { id: appointmentId, appointment: formFields },
       {
         onSuccess: () => {
           queryClient.invalidateQueries({
@@ -72,10 +81,13 @@ const AppointmentForm = ({ fields }: AppointmentFormProps) => {
     updateTemplates({ id: appointmentId, appointment: templates });
   };
 
+  const watchedFields = methods.watch("fields") || [];
+  const resultFields = [...fields, ...watchedFields];
+
   return (
     <FormProvider {...methods}>
       <div className="p-4">
-        {fields.map((field) => {
+        {resultFields.map((field) => {
           if (!field) return null;
 
           return (
@@ -89,6 +101,16 @@ const AppointmentForm = ({ fields }: AppointmentFormProps) => {
             />
           );
         })}
+        <div>
+          <FieldsModal handler={handleOpen} isOpen={open} />
+          <Button
+            className="text-[#605BFF]"
+            onClick={handleOpen}
+            variant="text"
+          >
+            Agergar Campos
+          </Button>
+        </div>
         <div className="flex justify-end gap-x-2 py-4">
           <Button onClick={() => state.undo()}>Deshacer</Button>
           <Button onClick={methods.handleSubmit(onSubmit)}>Guardar</Button>

@@ -2,8 +2,10 @@ import type { TemporalState } from "zundo";
 import { temporal } from "zundo";
 import { create, useStore } from "zustand";
 import { devtools } from "zustand/middleware";
+import { Field } from "~/types";
 
 interface AppointmentState {
+  customFields: Field[];
   removedFields: number[];
   setRemovedFields: (fields: number) => void;
   prefilledTemplates: number[];
@@ -17,6 +19,8 @@ interface AppointmentState {
 const useAppointmentStore = create<AppointmentState>()(
   devtools(
     temporal((set, get) => ({
+      customFields: [],
+      setCustomFields: (fields: Field[]) => set({ customFields: fields }),
       removedFields: [],
       setRemovedFields: (fieldId) =>
         set({ removedFields: [...get().removedFields, fieldId] }),
