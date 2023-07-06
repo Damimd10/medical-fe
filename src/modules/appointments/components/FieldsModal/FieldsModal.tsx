@@ -31,14 +31,19 @@ const FieldsModal = ({ handler, isOpen }: FieldsModalProps) => {
     handler();
   };
 
-  const customFields: Field[] = getValues("fields") || [];
-  const fields = data.filter((field) => {
-    const isCustom = customFields.find(
-      (customField) => customField.id === field.id
-    );
+  const { fields = [], ...formFields } = getValues();
 
-    return !isCustom;
-  });
+  const fieldsOptions = data
+    .filter((field) => {
+      const isCustom = fields.find(
+        (customField: Field) => customField.id === field.id
+      );
+      return !isCustom;
+    })
+    .filter((field) => {
+      const isDisplayed = Object.keys(formFields).includes(field.id.toString());
+      return !isDisplayed;
+    });
 
   return (
     <Dialog
@@ -55,7 +60,7 @@ const FieldsModal = ({ handler, isOpen }: FieldsModalProps) => {
             getOptionLabel={(option) => option.full_name || ""}
             getOptionValue={(option) => option.id.toString()}
             onChange={handleChange}
-            options={fields}
+            options={fieldsOptions}
           />
         )}
       </DialogBody>
