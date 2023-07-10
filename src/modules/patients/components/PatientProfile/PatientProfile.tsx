@@ -1,9 +1,11 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { Avatar, Button, Typography } from "@material-tailwind/react";
 import { Patient } from "~/types";
 
 import PatientTabs from "../PatientTabs";
+import SpecialtySelect from "./SpecialtySelect";
 
 interface PatientProfileProps {
   profile: Patient;
@@ -11,9 +13,17 @@ interface PatientProfileProps {
 
 const PatientProfile = ({ profile }: PatientProfileProps) => {
   const navigate = useNavigate();
+  const [selectedSpecialty, setSelectedSpecialty] = useState(0);
 
   const handleClickAppointment = () => {
+    console.log(selectedSpecialty);
     navigate(`/dashboard/patients/${profile.id}/appointments`);
+  };
+
+  const handleSpecialityChange = (speciality_id: number | null) => {
+    if (speciality_id) {
+      setSelectedSpecialty(speciality_id);
+    }
   };
 
   return (
@@ -29,7 +39,8 @@ const PatientProfile = ({ profile }: PatientProfileProps) => {
           </Typography>
           <Typography variant="small">Residencia</Typography>
         </div>
-        <div className="ml-auto">
+        <div className="flex flex-row ml-auto">
+          <SpecialtySelect onChange={handleSpecialityChange} />
           <Button
             className="rounded-full"
             color="light-blue"

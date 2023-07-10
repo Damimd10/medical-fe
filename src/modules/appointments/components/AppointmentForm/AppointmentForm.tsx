@@ -54,12 +54,14 @@ const AppointmentForm = ({ fields }: AppointmentFormProps) => {
     }));
 
     if (!appointmentId) {
+      console.log("Creating appointment");
       return createAppointment({
         date: Date.now(),
         doctorId: 1,
         fields: formFields,
         patientId: 1,
         specialityId: 1,
+        organizationId: 1,
       });
     }
 
@@ -108,7 +110,7 @@ const AppointmentForm = ({ fields }: AppointmentFormProps) => {
             onClick={handleOpen}
             variant="text"
           >
-            Agergar Campos
+            Agregar Campos
           </Button>
         </div>
         <div className="flex justify-end gap-x-2 py-4">
